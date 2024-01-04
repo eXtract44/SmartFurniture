@@ -4,8 +4,6 @@
 #define COLOR_TIME_COLON_BLINK 255, 255, 255
 
 
-
-
 const char* ntpServer = "pool.ntp.org"; // time
 long  gmtOffset_sec = 3600;//3600 sommer / 0 winter   ,,,,,,,,,ab 26.03 bis 29.10 - 3600 time
 const int   daylightOffset_sec = 3600;//time

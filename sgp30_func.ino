@@ -1,7 +1,7 @@
 #include <Wire.h>
 #include "Adafruit_SGP30.h"
 
-
+extern bool day_activated;
 Adafruit_SGP30 sgp_30;
 
 void ini_sgp() {

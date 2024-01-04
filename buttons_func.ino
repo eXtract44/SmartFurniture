@@ -1,6 +1,4 @@
 
-
-
 #define TOUCH_PIN   5
 
 void ini_buttons(){
