@@ -14,7 +14,7 @@
 bool day_activated = true;
 unsigned long previousMillis = 0;
 
-void ini_aht(void);
+/*void ini_aht(void);
 void ini_sgp(void);
 void ini_wifi(void);
 void ini_ws2812b(void);
@@ -49,7 +49,7 @@ void check_wifi(void);
 void read_time(void);
 void read_wetter_data(void);
 void print_time_colon(const uint8_t x, const uint8_t y);
-bool read_button_1(void);
+bool read_button_1(void);*/
 
 void setup() {
   Serial.begin(9600);  //start UART
