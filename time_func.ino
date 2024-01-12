@@ -1,8 +1,5 @@
-#define COLOR_TIME_HOUR 229, 242, 0
-#define COLOR_TIME_MIN 229, 242, 0
 #define COLOR_TIME_COLON 255, 255, 0
 #define COLOR_TIME_COLON_BLINK 255, 255, 255
-
 
 const char* ntpServer = "pool.ntp.org"; // time
 long  gmtOffset_sec = 3600;//3600 sommer / 0 winter   ,,,,,,,,,ab 26.03 bis 29.10 - 3600 time

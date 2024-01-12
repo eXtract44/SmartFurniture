@@ -28,11 +28,12 @@ void setAll(byte red, byte green, byte blue) {
   strip.show();
 }
 void draw_error_pixel() {
-  for (int i = 0; i < 28; i++) {
-    strip.setPixelColor(COUNT_LED, strip.Color(255, 0, 0));
-  }
+  draw_char('c', 1, 1, 255, 255, 255);
+  draw_char('h', 1, 7, 255, 255, 255);
+  draw_char('e', 1, 13, 255, 255, 255);
+  draw_char('c', 1, 19, 255, 255, 255);
+  draw_char('k', 1, 25, 255, 255, 255);
 }
-
 void draw_pixel_raw(const uint8_t x, const uint8_t y, const uint8_t r, const uint8_t g, const uint8_t b) {
   uint16_t y_temp = y;
   uint16_t x_temp = x;
@@ -604,15 +605,15 @@ void draw_humidity_aht(uint8_t number, const uint8_t x, const uint8_t y) {
   }
 }
 void draw_temperature_esp(float number, const uint8_t x, const uint8_t y) {
-  uint16_t tens, integer, tenths = 0U;
-  static uint8_t tens_old, integer_old, tenths_old = 999U;
+  int16_t temp_number, tens, integer, tenths = 888;
+  static uint16_t tens_old, integer_old, tenths_old = 999;
+  number = constrain(number, -9.9f, 99.9f);  //limit number to 4 symbols (xxxx, -12.3)
+  temp_number = number * 10;                 // 12.3 -> 123
   if (!day_activated) {
     tens_old = ~tens_old;
     integer_old = ~integer_old;
     tenths_old = ~tenths_old;
   } else {
-    number = constrain(number, -9.9f, 99.9f);                 //limit number to 4 symbols (xxxx, -12.3)
-    int16_t temp_number = static_cast<int16_t>(number) * 10;  // 12.3 -> 123
     if (number < 0) {
       temp_number = temp_number * -1;
       draw_minus(x, y);
@@ -632,31 +633,28 @@ void draw_temperature_esp(float number, const uint8_t x, const uint8_t y) {
     if (integer != integer_old) {
       integer_old = integer;
       draw_number_slow(integer, x + NUMBER_2_POSITION_X, y);  //draw x"2".x
-
-      draw_comma(x + 7, y + 4);   //draw xx"."x
-      tenths = temp_number % 10;  //3
-      if (tenths != tenths_old) {
-        tenths_old = tenths;
-        draw_number_slow(tenths, x + NUMBER_3_POSITION_X, y);  //draw xx."3"
-      }
+    }
+    draw_comma(x + 7, y + 4);   //draw xx"."x
+    tenths = temp_number % 10;  // 123 -> 3
+    if (tenths != tenths_old) {
+      tenths_old = tenths;
+      draw_number_slow(tenths, x + NUMBER_3_POSITION_X, y);  //draw xx."3"
     }
   }
 }
 void draw_temperature_aht(float number, const uint8_t x, const uint8_t y) {
-  uint16_t tens, integer, tenths = 0U;
-  static uint16_t tens_old, integer_old, tenths_old = 999U;
+  int16_t temp_number, tens, integer, tenths = 888;
+  static uint16_t tens_old, integer_old, tenths_old = 999;
+  number = constrain(number, -9.9f, 99.9f);  //limit number to 4 symbols (xxxx, -12.3)
+  temp_number = number * 10;                 // 12.3 -> 123
   if (!day_activated) {
     tens_old = ~tens_old;
     integer_old = ~integer_old;
     tenths_old = ~tenths_old;
-  }
-
-  else {
-    number = constrain(number, -9.9f, 99.9f);                 //limit number to 4 symbols (xxxx, -12.3)
-    int16_t temp_number = static_cast<int16_t>(number) * 10;  // 12.3 -> 123
+  } else {
     if (number < 0) {
-      draw_minus(x, y);
       temp_number = temp_number * -1;
+      draw_minus(x, y);
     } else {
       tens = temp_number / 100;  // 123 -> 1
       if (tens != tens_old) {
@@ -673,13 +671,12 @@ void draw_temperature_aht(float number, const uint8_t x, const uint8_t y) {
     if (integer != integer_old) {
       integer_old = integer;
       draw_number_slow(integer, x + NUMBER_2_POSITION_X, y);  //draw x"2".x
-
-      draw_comma(x + 7, y + 4);   //draw xx"."x
-      tenths = temp_number % 10;  //3
-      if (tenths != tenths_old) {
-        tenths_old = tenths;
-        draw_number_slow(tenths, x + NUMBER_3_POSITION_X, y);  //draw xx."3"
-      }
+    }
+    draw_comma(x + 7, y + 4);   //draw xx"."x
+    tenths = temp_number % 10;  // 123 -> 3
+    if (tenths != tenths_old) {
+      tenths_old = tenths;
+      draw_number_slow(tenths, x + NUMBER_3_POSITION_X, y);  //draw xx."3"
     }
   }
 }
@@ -755,8 +752,8 @@ void draw_mon_esp(uint8_t number, const uint8_t x, const uint8_t y) {
     integer = number % 10;
     if (tens != tens_old) {
       tens_old = tens;
-      if(tens < 10)clear_number_fast(x, y);
-      else draw_number_slow(tens, x, y); 
+      if (tens < 10) clear_number_fast(x, y);
+      else draw_number_slow(tens, x, y);
     }
     if (integer != integer_old) {
       integer_old = integer;
