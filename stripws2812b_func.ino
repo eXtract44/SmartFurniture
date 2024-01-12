@@ -28,12 +28,11 @@ void setAll(byte red, byte green, byte blue) {
   strip.show();
 }
 void draw_error_pixel() {
-  draw_char('c', 1, 1, 255, 255, 255);
-  draw_char('h', 1, 7, 255, 255, 255);
-  draw_char('e', 1, 13, 255, 255, 255);
-  draw_char('c', 1, 19, 255, 255, 255);
-  draw_char('k', 1, 25, 255, 255, 255);
+  for (int i = 0; i < 28; i++) {
+    strip.setPixelColor(COUNT_LED, strip.Color(255, 0, 0));
+  }
 }
+
 void draw_pixel_raw(const uint8_t x, const uint8_t y, const uint8_t r, const uint8_t g, const uint8_t b) {
   uint16_t y_temp = y;
   uint16_t x_temp = x;
