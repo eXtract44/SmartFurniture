@@ -18,7 +18,7 @@ void read_aht() {
   aht.getEvent(&aht_10_humidity, &aht_10_temperature);  // populate temp and humidity objects with fresh data
 }
 float get_temperature_aht(){
- return 21.2f;//static_cast<float>(aht_10_temperature.temperature);
+ return static_cast<float>(aht_10_temperature.temperature);
 }
 uint8_t get_humidity_aht(){
   return static_cast<uint8_t>(aht_10_humidity.relative_humidity);
