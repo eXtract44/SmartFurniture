@@ -1,7 +1,7 @@
 
 
 const char* ssid       = "WiFi";
-const char* password   = "Lokomotive132";
+const char* password   = "pass";
 #define CONNECT_IN 720 //1 tick 1sec
 
 void ini_wifi(){
