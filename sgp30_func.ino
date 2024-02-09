@@ -61,9 +61,8 @@ void debug_uart_sgp() {
   Serial.print(sgp_30.rawEthanol);
   Serial.println("");
   counter++;
-  if (counter == 30) {
+  if (counter > 30) {
     counter = 0;
-
     uint16_t TVOC_base, eCO2_base;
     if (!sgp_30.getIAQBaseline(&eCO2_base, &TVOC_base)) {
       Serial.println("Failed to get baseline readings");

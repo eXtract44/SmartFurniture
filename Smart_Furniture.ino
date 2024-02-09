@@ -25,13 +25,14 @@ void setup() {
   ini_ws2812b();
   ini_time();
   ini_buttons();
+  Serial.println("init finish");
 }
 void update_day() {
   draw_temperature_aht(get_temperature_aht(), 2, line_1_start_y);
   draw_point(13, line_1_start_y);
   draw_humidity_aht(get_humidity_aht(), 2, line_1_start_y + line_2_offset_y);
   draw_char('%', 10, line_1_start_y + line_2_offset_y, 255, 255, 90);
-  draw_uint_string(get_co2_sgp(), 1, line_1_start_y + line_2_offset_y * 2);
+  draw_uint_sgp30(get_co2_sgp(), 1, line_1_start_y + line_2_offset_y * 2);
   draw_hour_esp(get_hour(), 1, line_1_start_y + line_2_offset_y * 3);
   draw_min_esp(get_min(), 8, line_1_start_y + line_2_offset_y * 3);
   draw_mday_esp(get_mday(), 1, line_1_start_y + line_2_offset_y * 4);
@@ -46,7 +47,7 @@ void update_day() {
 void update_night() {
   clean_line(line_1_start_y);
   clean_line(line_1_start_y + line_2_offset_y);
-  draw_uint_string(get_co2_sgp(), 1, line_1_start_y + line_2_offset_y * 2);
+  draw_uint_sgp30(get_co2_sgp(), 1, line_1_start_y + line_2_offset_y * 2);
   draw_hour_esp(get_hour(), 1, line_1_start_y + line_2_offset_y * 3);
   draw_min_esp(get_min(), 8, line_1_start_y + line_2_offset_y * 3);
   clean_line(line_1_start_y + line_2_offset_y * 4);
@@ -102,12 +103,17 @@ void loop() {
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= 1000) {
     previousMillis = currentMillis;
-    debug();
+    //debug_uart();
     refresh_all_data();
   }
 }
-void debug() {
-
+void debug_uart() {
+debug_uart_aht();
+debug_btn();
+debug_uart_sgp();
+debug_temt6000();
+printLocalTime();
+debug_uart_esp();
 }
 
 /*

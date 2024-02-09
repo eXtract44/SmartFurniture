@@ -507,7 +507,7 @@ void clean_line(const uint8_t y) {
   clear_number_fast(4, y);
   clear_number_fast(7, y);
   clear_number_fast(10, y);
-  clear_number_fast(11, y);
+  clear_number_fast(12, y);
 }
 void draw_int_string(int16_t number, const uint8_t x, const uint8_t y) {
   uint16_t tens, integer = 0U;
@@ -607,8 +607,8 @@ void draw_humidity_aht(uint8_t number, const uint8_t x, const uint8_t y) {
 void draw_temperature_esp(float number, const uint8_t x, const uint8_t y) {
   int16_t temp_number, tens, integer, tenths = 888;
   static uint16_t tens_old, integer_old, tenths_old = 999;
-  number = constrain(number, -9.9f, 99.9f);  //limit number to 4 symbols (xxxx, -12.3)
   temp_number = number * 10;                 // 12.3 -> 123
+  temp_number = constrain(temp_number, -99, 999);  //limit number to 4 symbols (xxxx, -12.3)
   if (!day_activated) {
     tens_old = ~tens_old;
     integer_old = ~integer_old;
@@ -621,10 +621,10 @@ void draw_temperature_esp(float number, const uint8_t x, const uint8_t y) {
       tens = temp_number / 100;  // 123 -> 1
       if (tens != tens_old) {
         tens_old = tens;
-        if (tens == 0) {
-          clear_number_fast(x, y);  //clear "_"x.x
-        } else {
+        if(temp_number > 99){
           draw_number_slow(tens, x, y);  //draw "1"x.x
+        }else{
+          clear_number_fast(x, y);  //clear "_"x.x
         }
       }
     }
@@ -645,8 +645,8 @@ void draw_temperature_esp(float number, const uint8_t x, const uint8_t y) {
 void draw_temperature_aht(float number, const uint8_t x, const uint8_t y) {
   int16_t temp_number, tens, integer, tenths = 888;
   static uint16_t tens_old, integer_old, tenths_old = 999;
-  number = constrain(number, -9.9f, 99.9f);  //limit number to 4 symbols (xxxx, -12.3)
   temp_number = number * 10;                 // 12.3 -> 123
+  temp_number = constrain(temp_number, -99, 999);  //limit number to 4 symbols (xxxx, -12.3)
   if (!day_activated) {
     tens_old = ~tens_old;
     integer_old = ~integer_old;
@@ -659,10 +659,10 @@ void draw_temperature_aht(float number, const uint8_t x, const uint8_t y) {
       tens = temp_number / 100;  // 123 -> 1
       if (tens != tens_old) {
         tens_old = tens;
-        if (tens == 0) {
-          clear_number_fast(x, y);  //clear "_"x.x
-        } else {
+        if(temp_number > 99){
           draw_number_slow(tens, x, y);  //draw "1"x.x
+        }else{
+          clear_number_fast(x, y);  //clear "_"x.x
         }
       }
     }
@@ -761,7 +761,19 @@ void draw_mon_esp(uint8_t number, const uint8_t x, const uint8_t y) {
     }
   }
 }
-void draw_uint_string(uint16_t number, const uint8_t x, const uint8_t y) {
+#define RED 0
+#define GREEN 1
+#define BLUE 2
+uint8_t buf_color[3] = {255,255,255};
+void mix_color(uint16_t input_value) {  ///yellow rg=255 b=0   //r =255 gb 0
+  uint16_t temp_value = constrain(input_value, 400, 2800);
+ // 400-2800 red
+    buf_color[RED] = 255;
+    buf_color[GREEN] = map(temp_value, 400, 2800, 255, 1);
+    buf_color[BLUE] = map(temp_value, 400, 2800, 255, 1); 
+}
+void draw_uint_sgp30(uint16_t number, const uint8_t x, const uint8_t y) {
+  mix_color(number);
   uint8_t symbol_len = 3;
   uint16_t thousands, hundreds, tens, integer = 0U;
   static uint16_t thousands_old, hundreds_old, tens_old, integer_old = 254U;
@@ -776,31 +788,31 @@ void draw_uint_string(uint16_t number, const uint8_t x, const uint8_t y) {
 
   if (thousands != thousands_old) {
     thousands_old = thousands;
-    if (thousands == 0 && number < 1000) {
+    if (number < 1000) {
       clear_number_fast(x, y);
     } else {
-      draw_number_fast(thousands, x, y, 255, 255, 255);
+      draw_number_fast(thousands, x, y, buf_color[RED], buf_color[GREEN], buf_color[BLUE]);
     }
   }
   if (hundreds != hundreds_old) {
     hundreds_old = hundreds;
-    if (hundreds == 0 && number < 100) {
+    if (number < 100) {
       clear_number_fast(x + symbol_len + 1, y);
     } else {
-      draw_number_fast(hundreds, x + symbol_len + 1, y, 255, 255, 255);
+      draw_number_fast(hundreds, x + symbol_len + 1, y,  buf_color[RED], buf_color[GREEN], buf_color[BLUE]);
     }
   }
   if (tens != tens_old) {
     tens_old = tens;
-    if (tens == 0 && number < 10) {
+    if (number < 10) {
       clear_number_fast(x + symbol_len * 2 + 2, y);
     } else {
-      draw_number_fast(tens, x + symbol_len * 2 + 2, y, 255, 255, 255);
+      draw_number_fast(tens, x + symbol_len * 2 + 2, y, buf_color[RED], buf_color[GREEN], buf_color[BLUE]);
     }
   }
   if (integer != integer_old) {
     integer_old = integer;
-    draw_number_fast(integer, x + symbol_len * 3 + 2, y, 255, 255, 255);
+    draw_number_fast(integer, x + symbol_len * 3 + 2, y, buf_color[RED], buf_color[GREEN], buf_color[BLUE]);
   }
 }
 void draw_char(const char text, const uint8_t x, const uint8_t y, const uint8_t r, const uint8_t g, const uint8_t b) {
