@@ -766,7 +766,7 @@ void draw_mon_esp(uint8_t number, const uint8_t x, const uint8_t y) {
 #define BLUE 2
 uint8_t buf_color[3] = {255,255,255};
 void mix_color(uint16_t input_value) {  ///yellow rg=255 b=0   //r =255 gb 0
-  uint16_t temp_value = constrain(input_value, 400, 2800);
+  uint16_t temp_value = constrain(input_value, 400, 1600);
  // 400-2800 red
     buf_color[RED] = 255;
     buf_color[GREEN] = map(temp_value, 400, 2800, 255, 1);
