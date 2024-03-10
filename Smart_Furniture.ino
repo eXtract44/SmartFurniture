@@ -7,10 +7,8 @@ uint8_t time_day_start = 6;
 uint8_t time_day_end = 23;
 uint8_t display_update = 10;  // in sec
 
-const uint8_t activation_time_key = 3;  // in sec
-const uint8_t delay_after_key = 60;  // in sec
 
-#define line_1_start_y 1
+#define line_1_start_y 1 //1 raw
 #define line_2_offset_y 6
 
 bool day_activated = true;
@@ -55,25 +53,7 @@ void update_night() {
   clean_line(line_1_start_y + line_2_offset_y * 6);
   set_brightness_1();
 }
-bool key_handler() {
-  static bool key_state = false;
-  static uint16_t cnt_key_1, cnt_delay = 0;
- 
-  if (read_button_1()) {
-    cnt_key_1++;
-    if (cnt_key_1 > activation_time_key) {//activ time in sec
-        key_state= true;
-    }
-  }else if(key_state == true){
-        cnt_delay++;
-        if(cnt_delay > delay_after_key){
-        cnt_key_1 = 0;
-        cnt_delay = 0;
-        key_state= false;       
-       }
-  }
-  return key_state;
-}
+
 void refresh_all_data() {  //1 sec
   read_aht();
   read_sgp();
@@ -105,6 +85,7 @@ void loop() {
     previousMillis = currentMillis;
     //debug_uart();
     refresh_all_data();
+    set_time_offset();
   }
 }
 void debug_uart() {

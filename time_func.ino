@@ -7,6 +7,39 @@ const int   daylightOffset_sec = 3600;//time
 
 struct tm timeinfo;
 
+String receivedMessage;
+
+
+void set_time_offset(){
+ while (Serial.available() > 0) {
+    char receivedChar = Serial.read();
+    if (receivedChar == '\n') {
+      Serial.println(receivedMessage);  // Print the received message in the Serial monitor
+      if(receivedMessage == "winter"){
+        gmtOffset_sec = 3600;
+        ini_time();
+        get_hour();
+      }else if(receivedMessage == "sommer"){
+        gmtOffset_sec = 0;
+        ini_time();
+        get_hour();
+      }
+      receivedMessage = "";  // Reset the received message
+    } else {
+      receivedMessage += receivedChar;  // Append characters to the received message
+    }
+  }
+
+Serial.println(gmtOffset_sec, "to set time write sommer or winter");
+if(gmtOffset_sec == 3600){//winter
+Serial.println(gmtOffset_sec, "now is winter time set");
+}else if(gmtOffset_sec = 0){// sommer
+  Serial.println(gmtOffset_sec, "now is sommer time set");
+}
+
+Serial.println(gmtOffset_sec, "offset in sec");
+}
+
 void ini_time(){
  configTime(gmtOffset_sec, daylightOffset_sec, ntpServer); 
 }
