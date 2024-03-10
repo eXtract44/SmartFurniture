@@ -60,6 +60,7 @@ void refresh_all_data() {  //1 sec
   check_wifi();
   read_time();
   read_wetter_data();
+  set_time_offset();
   print_time_colon(7, line_1_start_y + line_2_offset_y * 3);
   static uint16_t cnt = 0;
   cnt++;
@@ -81,11 +82,11 @@ void refresh_all_data() {  //1 sec
 }
 void loop() {
   unsigned long currentMillis = millis();
+  read_uart();
   if (currentMillis - previousMillis >= 1000) {
     previousMillis = currentMillis;
     //debug_uart();
     refresh_all_data();
-    set_time_offset();
   }
 }
 void debug_uart() {

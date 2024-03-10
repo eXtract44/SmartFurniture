@@ -9,56 +9,62 @@ struct tm timeinfo;
 
 String receivedMessage;
 
-
-void set_time_offset(){
- while (Serial.available() > 0) {
+void read_uart() {
+  while (Serial.available() > 0) {
     char receivedChar = Serial.read();
     if (receivedChar == '\n') {
       Serial.println(receivedMessage);  // Print the received message in the Serial monitor
-      if(receivedMessage == "winter"){
-        gmtOffset_sec = 3600;
-        ini_time();
-        get_hour();
-      }else if(receivedMessage == "sommer"){
-        gmtOffset_sec = 0;
-        ini_time();
-        get_hour();
-      }
-      receivedMessage = "";  // Reset the received message
+      //receivedMessage = "";  // Reset the received message
     } else {
       receivedMessage += receivedChar;  // Append characters to the received message
     }
   }
-
-Serial.println(gmtOffset_sec, "to set time write sommer or winter");
-if(gmtOffset_sec == 3600){//winter
-Serial.println(gmtOffset_sec, "now is winter time set");
-}else if(gmtOffset_sec = 0){// sommer
-  Serial.println(gmtOffset_sec, "now is sommer time set");
+}
+void set_time_offset() {
+  static uint8_t cnt = 0;
+  cnt++;
+  if (cnt > 10) {
+    cnt = 0;
+    if (receivedMessage == "w") {
+      receivedMessage = "";  // Reset the received message
+      gmtOffset_sec = 3600;
+      ini_time();
+      get_hour();
+    } else if (receivedMessage == "s") {
+      receivedMessage = "";  // Reset the received message
+      gmtOffset_sec = 0;
+      ini_time();
+      get_hour();
+    }
+    Serial.println("w - winter, s - sommer");
+    if (gmtOffset_sec == 3600) { //winter
+      Serial.println("now is winter time set");
+    } else if (gmtOffset_sec = 0) { // sommer
+      Serial.println("now is sommer time set");
+    }
+    Serial.print("Offset in sec: "); Serial.print(gmtOffset_sec);
+  }
 }
 
-Serial.println(gmtOffset_sec, "offset in sec");
-}
-
-void ini_time(){
- configTime(gmtOffset_sec, daylightOffset_sec, ntpServer); 
+void ini_time() {
+  configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
 }
 void read_time() {
   getLocalTime(&timeinfo);
 }
-uint8_t get_hour(){
+uint8_t get_hour() {
   return timeinfo.tm_hour;
 }
-uint8_t get_min(){
+uint8_t get_min() {
   return timeinfo.tm_min;
 }
-uint8_t get_mday(){
+uint8_t get_mday() {
   return timeinfo.tm_mday;
 }
-uint8_t get_mon(){
+uint8_t get_mon() {
   return timeinfo.tm_mon + 1;
 }
-uint8_t get_sec(){
+uint8_t get_sec() {
   return timeinfo.tm_sec;
 }
 
@@ -73,7 +79,7 @@ void printLocalTime() {
 void print_time_colon(const uint8_t x, const uint8_t y) {
   static uint8_t cnt = 0;
   cnt++;
-   if (cnt == 1) {
+  if (cnt == 1) {
     draw_pixel_now(x, y + 1, COLOR_TIME_COLON);
     draw_pixel_now(x, y + 3, COLOR_TIME_COLON);
   }
