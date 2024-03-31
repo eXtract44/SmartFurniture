@@ -60,7 +60,6 @@ void refresh_all_data() {  //1 sec
   check_wifi();
   read_time();
   read_wetter_data();
-  set_time_offset();
   print_time_colon(7, line_1_start_y + line_2_offset_y * 3);
   static uint16_t cnt = 0;
   cnt++;
@@ -82,7 +81,7 @@ void refresh_all_data() {  //1 sec
 }
 void loop() {
   unsigned long currentMillis = millis();
-  read_uart();
+  set_time_offset();
   if (currentMillis - previousMillis >= 1000) {
     previousMillis = currentMillis;
     //debug_uart();
@@ -97,42 +96,3 @@ debug_temt6000();
 printLocalTime();
 debug_uart_esp();
 }
-
-/*
-  void ini_aht(void);
-  void ini_sgp(void);
-  void ini_wifi(void);
-  void ini_ws2812b(void);
-  void ini_time(void);
-  void ini_buttons(void);
-  void clean_line(const uint8_t y);
-  void draw_temperature_aht(float number, const uint8_t x, const uint8_t y);
-  void draw_humidity_aht(float number, const uint8_t x, const uint8_t y);
-  float get_temperature_aht(void);
-  uint8_t get_humidity_aht(void);
-  void draw_point(const uint8_t x, const uint8_t y);
-  void draw_uint_string(uint16_t number, const uint8_t x, const uint8_t y);
-  uint16_t get_co2_sgp(void);
-  void draw_hour_esp(uint8_t number, const uint8_t x, const uint8_t y);
-  void draw_min_esp(uint8_t number, const uint8_t x, const uint8_t y);
-  void draw_mday_esp(uint8_t number, const uint8_t x, const uint8_t y);
-  void draw_mon_esp(uint8_t number, const uint8_t x, const uint8_t y);
-  uint8_t get_hour(void);
-  uint8_t get_min(void);
-  uint8_t get_mday(void);
-  uint8_t get_mon(void);
-  void draw_temperature_esp(float number, const uint8_t x, const uint8_t y);
-  void draw_humidity_esp(uint8_t number, const uint8_t x, const uint8_t y);
-  float get_temperature_esp(void);
-  uint8_t get_humidity_esp(void);
-  void draw_char(const char text, const uint8_t x, const uint8_t y, const uint8_t r, const uint8_t g, const uint8_t b);
-  void read_brightness(void);
-  void set_brightness_1(void);
-  void read_aht(void);
-  void read_sgp(void);
-  void check_wifi(void);
-  void read_time(void);
-  void read_wetter_data(void);
-  void print_time_colon(const uint8_t x, const uint8_t y);
-  bool read_button_1(void);
-*/
