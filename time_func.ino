@@ -7,43 +7,11 @@ const int daylightOffset_sec = 3600;     //time
 
 struct tm timeinfo;
 
-String receivedMessage;
-
-void read_uart() {
-  while (Serial.available() > 0) {
-    char receivedChar = Serial.read();
-    if (receivedChar == '\n') {
-      Serial.println(receivedMessage);  // Print the received message in the Serial monitor
-      //receivedMessage = "";  // Reset the received message
-    } else {
-      receivedMessage += receivedChar;  // Append characters to the received message
-    }
-  }
+void set_gmt_offset(long offset){
+  gmtOffset_sec = offset; 
 }
-void set_time_offset() {
-  while (Serial.available() > 0) {
-    char receivedChar = Serial.read();
-    if (receivedChar == '?') {  //start dialog menu
-      Serial.println("to set winter or sommer time, send:");
-      Serial.println("w - winter_0_sec, s - sommer_3600_sec");
-      Serial.print("Offset in sec now: ");
-      Serial.println(gmtOffset_sec);
-    } else if (receivedChar == 's') {
-      gmtOffset_sec = 3600;
-      Serial.println("now is sommer time !");
-      Serial.print("Offset in sec now: ");
-      Serial.println(gmtOffset_sec);
-      ini_time();
-      get_hour();
-    } else if (receivedChar == 'w') {
-      gmtOffset_sec = 0;
-      Serial.println("now is winter time !");
-      Serial.print("Offset in sec now: ");
-      Serial.println(gmtOffset_sec);
-      ini_time();
-      get_hour();
-    }
-  }
+long get_gmt_offset(){
+  return gmtOffset_sec; 
 }
 void ini_time() {
   configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);

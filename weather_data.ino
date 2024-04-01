@@ -27,6 +27,11 @@ void read_wetter_data() {
     esp_data.humidity = int(myObject["main"]["humidity"]);
   }
 }
+void read_wetter_data_all() {
+    String serverPath = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "," + countryCode + "&APPID=" + openWeatherMapApiKey;
+    jsonBuffer = httpGETRequest(serverPath.c_str());
+    Serial.println(jsonBuffer);
+}
 float get_temperature_esp() {
   return static_cast<float>(esp_data.temp);
 }

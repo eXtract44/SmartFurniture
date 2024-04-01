@@ -1,7 +1,6 @@
 #include <Wire.h>
 #include "Adafruit_SGP30.h"
 
-extern bool day_activated;
 Adafruit_SGP30 sgp_30;
 
 void ini_sgp() {
@@ -42,7 +41,7 @@ return sgp_30.eCO2;
 }
 
 void debug_uart_sgp() {
-  static auto counter = 0;
+  //static auto counter = 0;
   Serial.print("TVOC ");
   Serial.print(sgp_30.TVOC);
   Serial.print(" ppb\t");
@@ -60,9 +59,9 @@ void debug_uart_sgp() {
   Serial.print("Raw Ethanol ");
   Serial.print(sgp_30.rawEthanol);
   Serial.println("");
-  counter++;
-  if (counter > 30) {
-    counter = 0;
+  //counter++;
+  //if (counter > 30) {
+    //counter = 0;
     uint16_t TVOC_base, eCO2_base;
     if (!sgp_30.getIAQBaseline(&eCO2_base, &TVOC_base)) {
       Serial.println("Failed to get baseline readings");
@@ -72,5 +71,5 @@ void debug_uart_sgp() {
     Serial.print(eCO2_base, HEX);
     Serial.print(" & TVOC: 0x");
     Serial.println(TVOC_base, HEX);
-  }
+  //}
 }
