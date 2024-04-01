@@ -24,6 +24,7 @@ void setup() {
   ini_time();
   ini_buttons();
   Serial.println("init finish");
+  check_all_values();
 }
 void update_day() {
   draw_temperature_aht(get_temperature_aht(), 2, line_1_start_y);
@@ -95,4 +96,28 @@ debug_uart_sgp();
 debug_temt6000();
 printLocalTime();
 debug_uart_esp();
+}
+void check_all_values(){
+  draw_point(13, line_1_start_y);
+  draw_point(13, line_1_start_y + line_2_offset_y * 5);
+  for (float i = -9.5;i<30; i += 4.5){
+    draw_temperature_fast(i, 2, line_1_start_y);
+    draw_temperature_fast(i, 2, line_1_start_y + line_2_offset_y * 5);
+  }
+  draw_char('%', 10, line_1_start_y + line_2_offset_y, 255, 255, 90);
+  draw_char('%', 10, line_1_start_y + line_2_offset_y * 6, 255, 255, 90);
+  for (uint8_t i = 0;i<100; i += 10){
+    draw_humidity_fast(i, 2, line_1_start_y + line_2_offset_y);
+    draw_humidity_fast(i, 2, line_1_start_y + line_2_offset_y * 6);
+  }
+   for (uint16_t i = 0;i<9999; i += 555){
+    draw_uint_sgp30(i, 1, line_1_start_y + line_2_offset_y * 2);
+  }
+  draw_point(8, line_1_start_y + line_2_offset_y * 4 + 4);
+   for (uint8_t i = 0;i<24; i ++){
+    draw_time_esp_fast(i, 1, line_1_start_y + line_2_offset_y * 3);
+    draw_time_esp_fast(i, 8, line_1_start_y + line_2_offset_y * 3);
+    draw_time_esp_fast(i, 1, line_1_start_y + line_2_offset_y * 4);
+    draw_time_esp_fast(i / 2, 9, line_1_start_y + line_2_offset_y * 4);
+  } 
 }

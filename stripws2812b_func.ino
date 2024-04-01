@@ -60,6 +60,10 @@ void draw_pixel_now(const uint8_t x, const uint8_t y, const uint8_t r, const uin
   draw_pixel_raw(x, y, r, g, b);
   strip.show();
 }
+void draw_pixel_fast(const uint8_t x, const uint8_t y) {
+  draw_pixel_raw(x, y, 255, 255, 255);
+  strip.show();
+}
 void draw_pixel_slow_white(const uint8_t x, const uint8_t y, const uint8_t speed_step) {
   for (uint16_t rgb = 0; rgb < 255; rgb += speed_step) {
     draw_pixel_raw(x, y, rgb, rgb, rgb);
@@ -376,7 +380,292 @@ void draw_number_slow(const uint8_t number, const uint8_t x, const uint8_t y) {
       /////////////////////////////////////////////////////////////////////////////////////////     9
   }
 }
-void draw_number_fast(const uint8_t number, const uint8_t x, const uint8_t y, const uint8_t r, const uint8_t g, const uint8_t b) {
+
+
+
+void draw_number_fast(const uint8_t number, const uint8_t x, const uint8_t y) {
+  clear_number_fast(x, y);
+  switch (number) {
+    /////////////////////////////////////////////////////////////////////////////////////////     0
+    case 0:
+      //step one
+       draw_pixel_fast(x + 2, y);
+       
+       draw_pixel_fast(x + 2, y + 1 );
+       
+       draw_pixel_fast(x + 2, y + 2 );
+       
+       draw_pixel_fast(x + 2, y + 3 );
+       
+       draw_pixel_fast(x + 2, y + 4 );
+       
+      //step two
+       draw_pixel_fast(x + 1, y );
+       
+       draw_pixel_fast(x + 1, y + 4 );
+       
+      //step tree
+       draw_pixel_fast(x, y );
+       
+       draw_pixel_fast(x, y + 1 );
+       
+       draw_pixel_fast(x, y + 2 );
+       
+       draw_pixel_fast(x, y + 3 );
+       
+       draw_pixel_fast(x, y + 4 );
+       
+      break;
+    /////////////////////////////////////////////////////////////////////////////////////////     0
+    /////////////////////////////////////////////////////////////////////////////////////////     1
+    case 1:
+      //step one
+       draw_pixel_fast(x + 1, y );
+       
+       draw_pixel_fast(x + 1, y + 1 );
+       
+       draw_pixel_fast(x + 1, y + 2 );
+       
+       draw_pixel_fast(x + 1, y + 3 );
+       
+       draw_pixel_fast(x + 1, y + 4 );
+       
+      break;
+    /////////////////////////////////////////////////////////////////////////////////////////     1
+    /////////////////////////////////////////////////////////////////////////////////////////     2
+    case 2:
+      //step one
+       draw_pixel_fast(x + 2, y );
+       
+       draw_pixel_fast(x + 2, y + 1 );
+       
+       draw_pixel_fast(x + 2, y + 2 );
+       
+       draw_pixel_fast(x + 2, y + 4 );
+       
+      //step two
+       draw_pixel_fast(x + 1, y );
+       
+       draw_pixel_fast(x + 1, y + 2 );
+       
+       draw_pixel_fast(x + 1, y + 4 );
+       
+      //step tree
+       draw_pixel_fast(x, y + 2 );
+       
+       draw_pixel_fast(x, y + 3 );
+       
+       draw_pixel_fast(x, y + 4 );
+       
+       draw_pixel_fast(x, y );
+       
+      break;
+    /////////////////////////////////////////////////////////////////////////////////////////     2
+    /////////////////////////////////////////////////////////////////////////////////////////     3
+    case 3:
+      //step one
+       draw_pixel_fast(x + 2, y );
+       
+       draw_pixel_fast(x + 2, y + 1 );
+       
+       draw_pixel_fast(x + 2, y + 2 );
+       
+       draw_pixel_fast(x + 2, y + 3 );
+       
+       draw_pixel_fast(x + 2, y + 4 );
+       
+      //step two
+       draw_pixel_fast(x + 1, y );
+       
+       draw_pixel_fast(x + 1, y + 2 );
+       
+       draw_pixel_fast(x + 1, y + 4 );
+       
+      //step tree
+       draw_pixel_fast(x, y );
+       
+       draw_pixel_fast(x, y + 2 );
+       
+       draw_pixel_fast(x, y + 4 );
+       
+      break;
+    /////////////////////////////////////////////////////////////////////////////////////////     3
+    /////////////////////////////////////////////////////////////////////////////////////////     4
+    case 4:
+      //step one
+       draw_pixel_fast(x + 2, y );
+       
+       draw_pixel_fast(x + 2, y + 1 );
+       
+       draw_pixel_fast(x + 2, y + 2 );
+       
+       draw_pixel_fast(x + 2, y + 3 );
+       
+       draw_pixel_fast(x + 2, y + 4 );
+       
+      //step two
+       draw_pixel_fast(x + 1, y + 2 );
+       
+      //step tree
+       draw_pixel_fast(x, y );
+       
+       draw_pixel_fast(x, y + 1 );
+       
+       draw_pixel_fast(x, y + 2 );
+       
+      break;
+    /////////////////////////////////////////////////////////////////////////////////////////     4
+    /////////////////////////////////////////////////////////////////////////////////////////     5
+    case 5:
+      //step one
+       draw_pixel_fast(x + 2, y );
+       
+       draw_pixel_fast(x + 2, y + 2 );
+       
+       draw_pixel_fast(x + 2, y + 3 );
+       
+       draw_pixel_fast(x + 2, y + 4 );
+       
+      //step two
+       draw_pixel_fast(x + 1, y );
+       
+       draw_pixel_fast(x + 1, y + 2 );
+       
+       draw_pixel_fast(x + 1, y + 4 );
+       
+      //step tree
+       draw_pixel_fast(x, y );
+       
+       draw_pixel_fast(x, y + 1 );
+       
+       draw_pixel_fast(x, y + 2 );
+       
+       draw_pixel_fast(x, y + 4 );
+       
+      break;
+    /////////////////////////////////////////////////////////////////////////////////////////     5
+    /////////////////////////////////////////////////////////////////////////////////////////     6
+    case 6:
+      //step one
+       draw_pixel_fast(x + 2, y );
+       
+       draw_pixel_fast(x + 2, y + 2 );
+       
+       draw_pixel_fast(x + 2, y + 3 );
+       
+       draw_pixel_fast(x + 2, y + 4 );
+      //step two
+       draw_pixel_fast(x + 1, y );
+       
+       draw_pixel_fast(x + 1, y + 2 );
+       
+       draw_pixel_fast(x + 1, y + 4 );
+       
+      //step tree
+       draw_pixel_fast(x, y );
+       
+       draw_pixel_fast(x, y + 1 );
+       
+       draw_pixel_fast(x, y + 2 );
+       
+       draw_pixel_fast(x, y + 3 );
+       
+       draw_pixel_fast(x, y + 4 );
+       
+      break;
+    /////////////////////////////////////////////////////////////////////////////////////////     6
+    /////////////////////////////////////////////////////////////////////////////////////////     7
+    case 7:
+      //step one
+       draw_pixel_fast(x + 2, y );
+       
+       draw_pixel_fast(x + 2, y + 1 );
+       
+       draw_pixel_fast(x + 2, y + 2 );
+       
+       draw_pixel_fast(x + 2, y + 3 );
+       
+       draw_pixel_fast(x + 2, y + 4 );
+       
+      //step two
+       draw_pixel_fast(x + 1, y );
+       
+      //step tree
+       draw_pixel_fast(x, y );
+       
+      break;
+    /////////////////////////////////////////////////////////////////////////////////////////     7
+    /////////////////////////////////////////////////////////////////////////////////////////     8
+    case 8:
+      //step one
+       draw_pixel_fast(x + 2, y );
+       
+       draw_pixel_fast(x + 2, y + 1 );
+       
+       draw_pixel_fast(x + 2, y + 2 );
+       
+       draw_pixel_fast(x + 2, y + 3 );
+       
+       draw_pixel_fast(x + 2, y + 4 );
+       
+      //step two
+       draw_pixel_fast(x + 1, y );
+       
+       draw_pixel_fast(x + 1, y + 2 );
+       
+       draw_pixel_fast(x + 1, y + 4 );
+       
+      //step tree
+       draw_pixel_fast(x, y );
+       
+       draw_pixel_fast(x, y + 1 );
+       
+       draw_pixel_fast(x, y + 2 );
+       
+       draw_pixel_fast(x, y + 3 );
+       
+       draw_pixel_fast(x, y + 4 );
+       
+      break;
+    /////////////////////////////////////////////////////////////////////////////////////////     8
+    /////////////////////////////////////////////////////////////////////////////////////////     9
+    case 9:
+      //step one
+       draw_pixel_fast(x + 2, y );
+       
+       draw_pixel_fast(x + 2, y + 1 );
+       
+       draw_pixel_fast(x + 2, y + 2 );
+       
+       draw_pixel_fast(x + 2, y + 3 );
+       
+       draw_pixel_fast(x + 2, y + 4 );
+       
+      //step two
+       draw_pixel_fast(x + 1, y );
+       
+       draw_pixel_fast(x + 1, y + 2 );
+       
+       draw_pixel_fast(x + 1, y + 4 );
+       
+      //step tree
+       draw_pixel_fast(x, y );
+       
+       draw_pixel_fast(x, y + 1 );
+       
+       draw_pixel_fast(x, y + 2 );
+       
+       draw_pixel_fast(x, y + 4 );
+       
+      break;
+      /////////////////////////////////////////////////////////////////////////////////////////     9
+  }
+}
+
+
+
+
+void draw_number_fast_narrow(const uint8_t number, const uint8_t x, const uint8_t y, const uint8_t r, const uint8_t g, const uint8_t b) {
   clear_number_fast(x, y);
   switch (number) {
     case 0:
@@ -604,6 +893,60 @@ void draw_humidity_aht(uint8_t number, const uint8_t x, const uint8_t y) {
     }
   }
 }
+
+
+void draw_humidity_fast(uint8_t number, const uint8_t x, const uint8_t y) {
+  uint16_t tens, integer = 0U;
+  static uint16_t tens_old, integer_old = 999;
+    if (number > 99) number = 99;
+    tens = number / 10;
+    integer = number % 10;
+    if (integer != integer_old) {
+      integer_old = integer;
+      draw_number_fast(integer, x + 4, y);
+    }
+    if (tens != tens_old) {
+      tens_old = tens;
+      if (tens == 0) {
+        clear_number_fast(x, y);
+      } else {
+        draw_number_fast(tens, x, y);
+      }
+  }
+}
+
+void draw_temperature_fast(float number, const uint8_t x, const uint8_t y) {
+  int16_t temp_number, tens, integer, tenths = 888;
+  static uint16_t tens_old, integer_old, tenths_old = 999;
+  temp_number = number * 10;                 // 12.3 -> 123
+  temp_number = constrain(temp_number, -99, 999);  //limit number to 4 symbols (xxxx, -12.3)
+    if (number < 0) {
+      temp_number = temp_number * -1;
+      draw_minus(x, y);
+    } else {
+      tens = temp_number / 100;  // 123 -> 1
+      if (tens != tens_old) {
+        tens_old = tens;
+        if(temp_number > 99){
+          draw_number_fast(tens, x, y);  //draw "1"x.x
+        }else{
+          clear_number_fast(x, y);  //clear "_"x.x
+        }
+      }
+    }
+    integer = temp_number % 100;  // 123 -> 23
+    integer = integer / 10;       // 23 -> 2
+    if (integer != integer_old) {
+      integer_old = integer;
+      draw_number_fast(integer, x + NUMBER_2_POSITION_X, y);  //draw x"2".x
+    }
+    draw_comma(x + 7, y + 4);   //draw xx"."x
+    tenths = temp_number % 10;  // 123 -> 3
+    if (tenths != tenths_old) {
+      tenths_old = tenths;
+      draw_number_fast(tenths, x + NUMBER_3_POSITION_X, y);  //draw xx."3"
+    }
+}
 void draw_temperature_esp(float number, const uint8_t x, const uint8_t y) {
   int16_t temp_number, tens, integer, tenths = 888;
   static uint16_t tens_old, integer_old, tenths_old = 999;
@@ -677,6 +1020,26 @@ void draw_temperature_aht(float number, const uint8_t x, const uint8_t y) {
     if (tenths != tenths_old) {
       tenths_old = tenths;
       draw_number_slow(tenths, x + NUMBER_3_POSITION_X, y);  //draw xx."3"
+    }
+  }
+}
+
+void draw_time_esp_fast(uint8_t number, const uint8_t x, const uint8_t y) {
+  uint8_t tens, integer = 0U;
+  static uint8_t tens_old, integer_old = 25;
+  //number = constrain(number, 0, 24);
+  tens = number / 10;
+  integer = number % 10;
+  if (integer != integer_old) {
+    integer_old = integer;
+    draw_number_fast(integer, x + 3, y);
+  }
+  if (tens != tens_old) {
+    tens_old = tens;
+    if (tens == 0) {
+      clear_number_fast(x, y);
+    } else {
+      draw_number_fast(tens, x, y);
     }
   }
 }
@@ -791,7 +1154,7 @@ void draw_uint_sgp30(uint16_t number, const uint8_t x, const uint8_t y) {
     if (number < 1000) {
       clear_number_fast(x, y);
     } else {
-      draw_number_fast(thousands, x, y, buf_color[RED], buf_color[GREEN], buf_color[BLUE]);
+      draw_number_fast_narrow(thousands, x, y, buf_color[RED], buf_color[GREEN], buf_color[BLUE]);
     }
   }
   if (hundreds != hundreds_old) {
@@ -799,7 +1162,7 @@ void draw_uint_sgp30(uint16_t number, const uint8_t x, const uint8_t y) {
     if (number < 100) {
       clear_number_fast(x + symbol_len + 1, y);
     } else {
-      draw_number_fast(hundreds, x + symbol_len + 1, y,  buf_color[RED], buf_color[GREEN], buf_color[BLUE]);
+      draw_number_fast_narrow(hundreds, x + symbol_len + 1, y,  buf_color[RED], buf_color[GREEN], buf_color[BLUE]);
     }
   }
   if (tens != tens_old) {
@@ -807,12 +1170,12 @@ void draw_uint_sgp30(uint16_t number, const uint8_t x, const uint8_t y) {
     if (number < 10) {
       clear_number_fast(x + symbol_len * 2 + 2, y);
     } else {
-      draw_number_fast(tens, x + symbol_len * 2 + 2, y, buf_color[RED], buf_color[GREEN], buf_color[BLUE]);
+      draw_number_fast_narrow(tens, x + symbol_len * 2 + 2, y, buf_color[RED], buf_color[GREEN], buf_color[BLUE]);
     }
   }
   if (integer != integer_old) {
     integer_old = integer;
-    draw_number_fast(integer, x + symbol_len * 3 + 2, y, buf_color[RED], buf_color[GREEN], buf_color[BLUE]);
+    draw_number_fast_narrow(integer, x + symbol_len * 3 + 2, y, buf_color[RED], buf_color[GREEN], buf_color[BLUE]);
   }
 }
 void draw_char(const char text, const uint8_t x, const uint8_t y, const uint8_t r, const uint8_t g, const uint8_t b) {
