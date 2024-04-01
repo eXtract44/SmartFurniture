@@ -14,9 +14,9 @@ void set_brightness_1() {
   strip.setBrightness(1);
 }
 void debug_temt6000(){
-    Serial.println("analogRead(A0) = ");
+    Serial.print("analogRead(A0) = ");
   Serial.print(analogRead(A0));
-  Serial.print(" bit");
-  Serial.println("brightness in % = ");
-  Serial.print(brightness);
+  Serial.println(" bit");
+  Serial.print("brightness in % = ");
+  Serial.println(brightness);
 }

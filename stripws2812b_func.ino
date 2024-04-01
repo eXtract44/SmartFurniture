@@ -102,6 +102,14 @@ void clear_number_fast(const uint8_t x, const uint8_t y) {
   }
   strip.show();
 }
+void fill_number_fast(const uint8_t x, const uint8_t y,byte r,byte g,byte b) {
+  for (uint8_t i = 0; i <= 2; i++) {
+    for (uint8_t j = 0; j <= 4; j++) {
+      draw_pixel_raw(x + i, y + j, r, g, b);
+    }
+  }
+  strip.show();
+}
 void draw_number_slow(const uint8_t number, const uint8_t x, const uint8_t y) {
   clear_number_fast(x, y);
   switch (number) {
@@ -798,6 +806,13 @@ void clean_line(const uint8_t y) {
   clear_number_fast(10, y);
   clear_number_fast(12, y);
 }
+void fill_line(const uint8_t y,byte r,byte g,byte b) {
+  fill_number_fast(1, y,r,g,b);
+  fill_number_fast(4, y,r,g,b);
+  fill_number_fast(7, y,r,g,b);
+  fill_number_fast(10, y,r,g,b);
+  fill_number_fast(12, y,r,g,b);
+}
 void draw_int_string(int16_t number, const uint8_t x, const uint8_t y) {
   uint16_t tens, integer = 0U;
   number = constrain(number, -99, 99);
@@ -893,63 +908,38 @@ void draw_humidity_aht(uint8_t number, const uint8_t x, const uint8_t y) {
     }
   }
 }
-
-
 void draw_humidity_fast(uint8_t number, const uint8_t x, const uint8_t y) {
   uint16_t tens, integer = 0U;
-  static uint16_t tens_old, integer_old = 999;
     if (number > 99) number = 99;
     tens = number / 10;
     integer = number % 10;
-    if (integer != integer_old) {
-      integer_old = integer;
       draw_number_fast(integer, x + 4, y);
-    }
-    if (tens != tens_old) {
-      tens_old = tens;
-      if (tens == 0) {
-        clear_number_fast(x, y);
-      } else {
-        draw_number_fast(tens, x, y);
-      }
-  }
+      draw_number_fast(tens, x, y);
 }
 
 void draw_temperature_fast(float number, const uint8_t x, const uint8_t y) {
   int16_t temp_number, tens, integer, tenths = 888;
-  static uint16_t tens_old, integer_old, tenths_old = 999;
   temp_number = number * 10;                 // 12.3 -> 123
   temp_number = constrain(temp_number, -99, 999);  //limit number to 4 symbols (xxxx, -12.3)
     if (number < 0) {
       temp_number = temp_number * -1;
       draw_minus(x, y);
     } else {
-      tens = temp_number / 100;  // 123 -> 1
-      if (tens != tens_old) {
-        tens_old = tens;
-        if(temp_number > 99){
-          draw_number_fast(tens, x, y);  //draw "1"x.x
-        }else{
-          clear_number_fast(x, y);  //clear "_"x.x
-        }
-      }
+      tens = temp_number / 100;  // 123 -> 1       
+      draw_number_fast(tens, x, y);  //draw "1"x.x    
     }
     integer = temp_number % 100;  // 123 -> 23
     integer = integer / 10;       // 23 -> 2
-    if (integer != integer_old) {
-      integer_old = integer;
-      draw_number_fast(integer, x + NUMBER_2_POSITION_X, y);  //draw x"2".x
-    }
+    draw_number_fast(integer, x + NUMBER_2_POSITION_X, y);  //draw x"2".x   
     draw_comma(x + 7, y + 4);   //draw xx"."x
-    tenths = temp_number % 10;  // 123 -> 3
-    if (tenths != tenths_old) {
-      tenths_old = tenths;
-      draw_number_fast(tenths, x + NUMBER_3_POSITION_X, y);  //draw xx."3"
-    }
+    tenths = temp_number % 10;  // 123 -> 3  
+    draw_number_fast(tenths, x + NUMBER_3_POSITION_X, y);  //draw xx."3"
 }
 void draw_temperature_esp(float number, const uint8_t x, const uint8_t y) {
-  int16_t temp_number, tens, integer, tenths = 888;
+ int16_t temp_number, tens, integer, tenths = 888;
   static uint16_t tens_old, integer_old, tenths_old = 999;
+  static bool minus = 0;
+  static bool minus_old = 0;
   temp_number = number * 10;                 // 12.3 -> 123
   temp_number = constrain(temp_number, -99, 999);  //limit number to 4 symbols (xxxx, -12.3)
   if (!day_activated) {
@@ -960,7 +950,13 @@ void draw_temperature_esp(float number, const uint8_t x, const uint8_t y) {
     if (number < 0) {
       temp_number = temp_number * -1;
       draw_minus(x, y);
+      minus = 1;
     } else {
+      if(minus != minus_old){
+        minus_old = minus;
+        clear_number_fast(x, y);  //clear "-"x.x
+        minus = 0;
+      }
       tens = temp_number / 100;  // 123 -> 1
       if (tens != tens_old) {
         tens_old = tens;
@@ -971,8 +967,12 @@ void draw_temperature_esp(float number, const uint8_t x, const uint8_t y) {
         }
       }
     }
-    integer = temp_number % 100;  // 123 -> 23
+    integer = temp_number % 100;  // 123 -> 23   110 > 10
+    if(integer < 10){
+    integer = 0;
+    }else{
     integer = integer / 10;       // 23 -> 2
+    }
     if (integer != integer_old) {
       integer_old = integer;
       draw_number_slow(integer, x + NUMBER_2_POSITION_X, y);  //draw x"2".x
@@ -986,8 +986,10 @@ void draw_temperature_esp(float number, const uint8_t x, const uint8_t y) {
   }
 }
 void draw_temperature_aht(float number, const uint8_t x, const uint8_t y) {
-  int16_t temp_number, tens, integer, tenths = 888;
+ int16_t temp_number, tens, integer, tenths = 888;
   static uint16_t tens_old, integer_old, tenths_old = 999;
+  static bool minus = 0;
+  static bool minus_old = 0;
   temp_number = number * 10;                 // 12.3 -> 123
   temp_number = constrain(temp_number, -99, 999);  //limit number to 4 symbols (xxxx, -12.3)
   if (!day_activated) {
@@ -998,7 +1000,13 @@ void draw_temperature_aht(float number, const uint8_t x, const uint8_t y) {
     if (number < 0) {
       temp_number = temp_number * -1;
       draw_minus(x, y);
+      minus = 1;
     } else {
+      if(minus != minus_old){
+        minus_old = minus;
+        clear_number_fast(x, y);  //clear "-"x.x
+        minus = 0;
+      }
       tens = temp_number / 100;  // 123 -> 1
       if (tens != tens_old) {
         tens_old = tens;
@@ -1009,8 +1017,12 @@ void draw_temperature_aht(float number, const uint8_t x, const uint8_t y) {
         }
       }
     }
-    integer = temp_number % 100;  // 123 -> 23
+    integer = temp_number % 100;  // 123 -> 23   110 > 10
+    if(integer < 10){
+    integer = 0;
+    }else{
     integer = integer / 10;       // 23 -> 2
+    }
     if (integer != integer_old) {
       integer_old = integer;
       draw_number_slow(integer, x + NUMBER_2_POSITION_X, y);  //draw x"2".x
@@ -1026,22 +1038,10 @@ void draw_temperature_aht(float number, const uint8_t x, const uint8_t y) {
 
 void draw_time_esp_fast(uint8_t number, const uint8_t x, const uint8_t y) {
   uint8_t tens, integer = 0U;
-  static uint8_t tens_old, integer_old = 25;
-  //number = constrain(number, 0, 24);
   tens = number / 10;
   integer = number % 10;
-  if (integer != integer_old) {
-    integer_old = integer;
     draw_number_fast(integer, x + 3, y);
-  }
-  if (tens != tens_old) {
-    tens_old = tens;
-    if (tens == 0) {
-      clear_number_fast(x, y);
-    } else {
-      draw_number_fast(tens, x, y);
-    }
-  }
+    draw_number_fast(tens, x, y);
 }
 void draw_hour_esp(uint8_t number, const uint8_t x, const uint8_t y) {
   uint8_t tens, integer = 0U;
@@ -1158,20 +1158,12 @@ void draw_uint_sgp30(uint16_t number, const uint8_t x, const uint8_t y) {
     }
   }
   if (hundreds != hundreds_old) {
-    hundreds_old = hundreds;
-    if (number < 100) {
-      clear_number_fast(x + symbol_len + 1, y);
-    } else {
-      draw_number_fast_narrow(hundreds, x + symbol_len + 1, y,  buf_color[RED], buf_color[GREEN], buf_color[BLUE]);
-    }
+    hundreds_old = hundreds;   
+      draw_number_fast_narrow(hundreds, x + symbol_len + 1, y,  buf_color[RED], buf_color[GREEN], buf_color[BLUE]);   
   }
   if (tens != tens_old) {
-    tens_old = tens;
-    if (number < 10) {
-      clear_number_fast(x + symbol_len * 2 + 2, y);
-    } else {
+    tens_old = tens;   
       draw_number_fast_narrow(tens, x + symbol_len * 2 + 2, y, buf_color[RED], buf_color[GREEN], buf_color[BLUE]);
-    }
   }
   if (integer != integer_old) {
     integer_old = integer;
