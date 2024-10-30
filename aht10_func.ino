@@ -1,4 +1,5 @@
 #include <Adafruit_AHT10.h>
+#include <Wire.h>
 
 #define SDA_PIN_AHT10 33
 #define SCL_PIN_AHT10 32
@@ -7,8 +8,8 @@ Adafruit_AHT10 aht;  //constructor
 sensors_event_t aht_10_humidity, aht_10_temperature;
 
 void ini_aht() {
-  Wire1.begin(SDA_PIN_AHT10, SCL_PIN_AHT10);
-  if (!aht.begin(&Wire1)) {
+  Wire.begin(SDA_PIN_AHT10, SCL_PIN_AHT10);
+  if (!aht.begin(&Wire)) {
     Serial.println("Could not find AHT10? Check wiring");
     while (1) delay(10);
   }

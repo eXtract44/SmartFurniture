@@ -41,7 +41,7 @@ void printLocalTime() {
     Serial.println("Failed to obtain time");
     return;
   }
-  Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
+ // Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
 }
 void print_time_colon(const uint8_t x, const uint8_t y) {
   static uint8_t cnt = 0;
