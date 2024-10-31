@@ -1,3 +1,4 @@
+#if WIFI_
 const String openWeatherMapApiKey = "467236d17fdfc652af154eb837422f8d";
 String city = "Dortmund";
 String countryCode = "DE";
@@ -70,3 +71,4 @@ String httpGETRequest(const char* serverName) {
 
   return payload;
 }
+#endif

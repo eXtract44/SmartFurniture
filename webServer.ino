@@ -1,6 +1,16 @@
 
+#define WEB_SERVER 0
+#if WEB_SERVER
 
+void init_webserver() {
+  // Webserver-Routen einrichten
+  server.on("/", HTTP_GET, handleRoot);
+  server.on("/update", HTTP_POST, handleUpdate);
 
+  // Webserver starten
+  server.begin();
+  Serial.println("Webserver gestartet");
+}
 void handleRoot() {
   String html = "<html><body>";
   html += "<h1>ESP8266 Werte Einstellen</h1>";
@@ -28,12 +38,12 @@ void handleUpdate() {
     espPacket.user_thema = server.arg("user_thema").toInt();*/
 
     // Werte im EEPROM speichern
-    EEPROM.write(0, gmtOffset_sec);
+    //EEPROM.write(0, gmtOffset_sec);
    /* EEPROM.write(1, espPacket.tm_user_day_start_hour);
     EEPROM.write(2, espPacket.tm_user_day_end_hour);
     EEPROM.write(3, espPacket.user_current_menu);
     EEPROM.write(4, espPacket.user_thema);*/
-    EEPROM.commit();
+    //EEPROM.commit();
 
     server.send(200, "text/html", "<html><body><h1>Werte gespeichert!</h1><a href=\"/\">Zurück</a></body></html>");
     ini_time();
@@ -41,3 +51,4 @@ void handleUpdate() {
     server.send(400, "text/html", "Fehler: Werte fehlen!");
   }
 }
+#endif

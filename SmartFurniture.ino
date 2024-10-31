@@ -1,15 +1,10 @@
+#define WIFI_ 1
+
+#include <WiFi.h>
 #include "time.h"
-//#include <HTTPClient.h>
+#include <HTTPClient.h>
 #include <Arduino_JSON.h>
-#include <ESP8266WiFi.h>
-#include <WiFiClient.h>
-#include <ESP8266WebServer.h>
-#include <ESP8266HTTPClient.h>
-#include <EEPROM.h>
 
-ESP8266WebServer server(80);
-
-uint16_t time_offset;
 uint8_t time_day_start = 6;
 uint8_t time_day_end = 23;
 uint8_t display_update = 10;  // in sec
@@ -21,21 +16,18 @@ uint8_t display_update = 10;  // in sec
 bool day_activated = true;
 unsigned long previousMillis = 0;
 
-
 void setup() {
   Serial.begin(9600);  //start UART
   ini_aht();
   ini_sgp();
   ini_wifi();
-  init_webserver();
   ini_ws2812b();
   ini_time();
   ini_buttons();
-  EEPROM.begin(512);
-  set_gmt_offset(EEPROM.read(0));
   Serial.println("init finish");
   push_all_values();
 }
+
 void update_day() {
   draw_temperature_aht(get_temperature_aht(), 2, line_1_start_y);
   draw_point(13, line_1_start_y);
@@ -53,6 +45,7 @@ void update_day() {
   draw_char('%', 10, line_1_start_y + line_offset_y * 6, 255, 255, 90);
   read_brightness();
 }
+
 void update_night() {
   clean_line(line_1_start_y);
   clean_line(line_1_start_y + line_offset_y);
@@ -90,8 +83,8 @@ void refresh_all_data() {  //1 sec
     }
   }
 }
+
 void loop() {
-  server.handleClient();
   unsigned long currentMillis = millis();
   uart_menu_char();
   if (currentMillis - previousMillis >= 1000) {

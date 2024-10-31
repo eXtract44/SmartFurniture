@@ -1,5 +1,5 @@
 
-
+#if WIFI_
 const char* ssid       = "WiFi";
 const char* password   = "Lokomotive132";
 #define CONNECT_IN 720 //1 tick 1sec
@@ -26,13 +26,4 @@ void check_wifi(){
     connect_cnt=0;
   }
 }
-
-void init_webserver() {
-  // Webserver-Routen einrichten
-  server.on("/", HTTP_GET, handleRoot);
-  server.on("/update", HTTP_POST, handleUpdate);
-
-  // Webserver starten
-  server.begin();
-  Serial.println("Webserver gestartet");
-}
+#endif
