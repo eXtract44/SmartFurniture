@@ -2,7 +2,7 @@
 Board information:
 ESP32 WROOM
 
-Libery
+Library neoPixel 1,2,0
 
 https://dl.espressif.com/dl/package_esp32_index.json
 
